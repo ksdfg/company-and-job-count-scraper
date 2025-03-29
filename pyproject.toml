@@ -17,6 +17,7 @@ asyncio = "^3.4.3"
 crawl4ai = "^0.5.0.post8"
 pydantic = { extras = ["dotenv"], version = "^2.11.0" }
 pydantic-settings = "^2.8.1"
+inquirer = "^3.4.0"
 
 [tool.poetry.group.dev.dependencies]
 mypy = "^0.991"
