@@ -9,12 +9,13 @@ ENV POETRY_NO_INTERACTION=1 \
 
 WORKDIR /app
 
-COPY . .
-
+COPY poetry.lock pyproject.toml ./
 RUN poetry install --without dev && rm -rf $POETRY_CACHE_DIR
 
 ENV PATH="/app/.venv/bin:$PATH"
 
 RUN playwright install --with-deps chromium
 
-ENTRYPOINT ["poetry", "run", "python", "main.py"]
+COPY app ./app
+
+ENTRYPOINT ["poetry", "run", "python", "-m", "app"]

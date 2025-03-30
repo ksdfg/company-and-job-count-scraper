@@ -9,8 +9,8 @@ from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.firefox import GeckoDriverManager
 
-from core.config import settings
-from schemas.company import CompanyWithJobCounts, CompanyWithLinkedinSlug
+from app.core.config import settings
+from app.schemas.company import CompanyWithJobCounts, CompanyWithLinkedinSlug
 
 
 def setup_driver() -> webdriver.Firefox:

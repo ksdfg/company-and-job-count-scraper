@@ -2,8 +2,8 @@ import json
 
 import requests
 
-from core.config import settings
-from schemas.company import CompanyWithJobCounts, CompanyWithLinkedinSlug
+from app.core.config import settings
+from app.schemas.company import CompanyWithJobCounts, CompanyWithLinkedinSlug
 
 url = "https://api.coresignal.com/cdapi/v1/linkedin/job/search/filter"
 

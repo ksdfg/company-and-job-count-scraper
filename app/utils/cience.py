@@ -6,8 +6,8 @@ import requests
 from crawl4ai import AsyncWebCrawler
 from langchain_openai import ChatOpenAI
 
-from core.config import settings
-from schemas.company import CompanyList, CompanyWithLinkedinSlug
+from app.core.config import settings
+from app.schemas.company import CompanyList, CompanyWithLinkedinSlug
 
 model = ChatOpenAI(api_key=settings.OPENAI_API_KEY, model="gpt-4o", temperature=0)
 

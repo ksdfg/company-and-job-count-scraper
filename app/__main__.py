@@ -5,10 +5,10 @@ from string import ascii_letters, digits
 import inquirer
 from inquirer.errors import ValidationError
 
-from schemas.company import CompanyWithJobCounts, CompanyWithLinkedinSlug
-from utils.cience import get_companies
-from utils.coresignal import enrich_company_with_coresignal_job_counts
-from utils.linkedin import enrich_company_with_linkedin_job_counts, setup_driver
+from app.schemas.company import CompanyWithJobCounts, CompanyWithLinkedinSlug
+from app.utils.cience import get_companies
+from app.utils.coresignal import enrich_company_with_coresignal_job_counts
+from app.utils.linkedin import enrich_company_with_linkedin_job_counts, setup_driver
 
 
 def validate_numeric_input(_, choice) -> bool:
