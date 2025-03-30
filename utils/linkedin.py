@@ -25,7 +25,7 @@ def setup_driver() -> webdriver.Firefox:
     """
     options = Options()
     options.add_argument("--disable-blink-features=AutomationControlled")
-    # options.add_argument("--headless")
+    options.add_argument("--headless")
 
     driver = webdriver.Firefox(service=Service(GeckoDriverManager().install()), options=options)
 
@@ -156,7 +156,9 @@ def get_jobs(driver: webdriver.Firefox, company_handle: str, job_titles: list[st
         return job_counts
 
 
-def enrich_company_with_job_counts(driver: webdriver.Firefox, company: CompanyWithLinkedinSlug) -> CompanyWithJobCounts:
+def enrich_company_with_linkedin_job_counts(
+    driver: webdriver.Firefox, company: CompanyWithLinkedinSlug
+) -> CompanyWithJobCounts:
     """
     Enrich a CompanyWithLinkedinSlug object with job counts for the company.
 
@@ -194,7 +196,7 @@ if __name__ == "__main__":
         linkedin_slug="google",
     )
 
-    enriched_company = enrich_company_with_job_counts(driver, company)
+    enriched_company = enrich_company_with_linkedin_job_counts(driver, company)
     print(enriched_company)
 
     driver.quit()

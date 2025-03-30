@@ -5,7 +5,8 @@ from inquirer.errors import ValidationError
 
 from schemas.company import CompanyWithJobCounts, CompanyWithLinkedinSlug
 from utils.cience import get_companies
-from utils.linkedin import enrich_company_with_job_counts, setup_driver
+from utils.coresignal import enrich_company_with_coresignal_job_counts
+from utils.linkedin import enrich_company_with_linkedin_job_counts, setup_driver
 
 
 def validate_numeric_input(_, choice) -> bool:
@@ -127,11 +128,35 @@ def fetch_enriched_companies_from_linkedin(companies: list[CompanyWithLinkedinSl
             continue
 
         # Fetch job counts for the current company
-        enriched_companies.append(enrich_company_with_job_counts(driver, company))
+        enriched_companies.append(enrich_company_with_linkedin_job_counts(driver, company))
         print("Fetched job counts for", company.company_name, "(", i + 1, "/", len(companies), ")")
 
     # Clean up the driver
     driver.quit()
+    print("\nFound", len(enriched_companies), "enriched companies", end="\n\n")
+
+    return enriched_companies
+
+
+def fetch_enriched_companies_from_coresignal(companies: list[CompanyWithLinkedinSlug]) -> list[CompanyWithJobCounts]:
+    """
+    Fetch job counts for a list of companies from Coresignal.
+
+    Args:
+        companies: A list of CompanyWithLinkedinSlug objects to fetch job counts for.
+
+    Returns:
+        A list of CompanyWithJobCounts objects representing the companies with job counts.
+    """
+    print("----------------------------------------------------")
+    print("Fetching job counts from Coresignal")
+    print("----------------------------------------------------")
+
+    enriched_companies = []
+    for i, company in enumerate(companies):
+        enriched_companies.append(enrich_company_with_coresignal_job_counts(company))
+        print("Fetched job counts for", company.company_name, "(", i + 1, "/", len(companies), ")")
+
     print("\nFound", len(enriched_companies), "enriched companies", end="\n\n")
 
     return enriched_companies
@@ -167,7 +192,7 @@ if __name__ == "__main__":
 
     companies = fetch_companies_from_cience(industry_group, revenue, max_pages)
 
-    enriched_companies = fetch_enriched_companies_from_linkedin(companies)
+    enriched_companies = fetch_enriched_companies_from_coresignal(companies)
 
     if len(enriched_companies) > 0:
         write_enriched_companies_to_file(enriched_companies)
