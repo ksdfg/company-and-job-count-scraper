@@ -5,9 +5,9 @@ from html import unescape
 import requests
 from crawl4ai import AsyncWebCrawler
 from langchain_openai import ChatOpenAI
-from pydantic import BaseModel, Field
 
 from core.config import settings
+from schemas.company import CompanyList, CompanyWithLinkedinSlug
 
 model = ChatOpenAI(api_key=settings.OPENAI_API_KEY, model="gpt-4o", temperature=0)
 
@@ -64,23 +64,6 @@ async def get_cience_page_contents(pages: list[str]) -> list[str]:
             contents.append(result.markdown)
 
     return contents
-
-
-class Company(BaseModel):
-    company_name: str = Field(description="The name of the company")
-    industry: str = Field(description="The industry in which the company operates")
-    location: str = Field(description="The location of the company's headquarters")
-    revenue: str = Field(description="The company's annual revenue")
-    employees: str = Field(description="The number of employees in the company")
-    cience_details_page: str = Field(description="URL to the company details page")
-
-
-class CompanyWithLinkedinSlug(Company):
-    linkedin_slug: str
-
-
-class CompanyList(BaseModel):
-    companies: list[Company]
 
 
 structured_llm = model.with_structured_output(CompanyList)

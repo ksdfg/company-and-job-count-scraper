@@ -3,8 +3,9 @@ from csv import DictWriter
 import inquirer
 from inquirer.errors import ValidationError
 
-from utils.cience import CompanyWithLinkedinSlug, get_companies
-from utils.linkedin import CompanyWithJobCounts, enrich_company_with_job_counts, setup_driver
+from schemas.company import CompanyWithJobCounts, CompanyWithLinkedinSlug
+from utils.cience import get_companies
+from utils.linkedin import enrich_company_with_job_counts, setup_driver
 
 
 def validate_numeric_input(_, choice) -> bool:

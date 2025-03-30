@@ -10,7 +10,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from webdriver_manager.firefox import GeckoDriverManager
 
 from core.config import settings
-from utils.cience import CompanyWithLinkedinSlug
+from schemas.company import CompanyWithJobCounts, CompanyWithLinkedinSlug
 
 
 def setup_driver() -> webdriver.Firefox:
@@ -140,8 +140,8 @@ def get_jobs(driver: webdriver.Firefox, company_handle: str, job_titles: list[st
 
         # If there are no jobs or the LinkedIn slug is incorrect, return 0
         if (
-                "There are no jobs right now" in driver.page_source
-                or "This LinkedIn Page isn’t available" in driver.page_source
+            "There are no jobs right now" in driver.page_source
+            or "This LinkedIn Page isn’t available" in driver.page_source
         ):
             return job_counts
 
@@ -154,12 +154,6 @@ def get_jobs(driver: webdriver.Firefox, company_handle: str, job_titles: list[st
         print(f"Error searching jobs for {company_handle}:")
         print_exception(e)
         return job_counts
-
-
-class CompanyWithJobCounts(CompanyWithLinkedinSlug):
-    ai_jobs: int
-    engineer_jobs: int
-    it_jobs: int
 
 
 def enrich_company_with_job_counts(driver: webdriver.Firefox, company: CompanyWithLinkedinSlug) -> CompanyWithJobCounts:
