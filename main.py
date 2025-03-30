@@ -1,4 +1,6 @@
 from csv import DictWriter
+from random import choices
+from string import ascii_letters, digits
 
 import inquirer
 from inquirer.errors import ValidationError
@@ -173,8 +175,11 @@ def write_enriched_companies_to_file(enriched_companies: list[CompanyWithJobCoun
     print("Writing to file")
     print("----------------------------------------------------")
 
+    # Generate filename
+    filename = f"data/companies_{industry_group}_{revenue}_{''.join(choices(ascii_letters + digits, k=10))}.csv"
+
     # Open a file in write mode, and create a writer with the fieldnames from the first company
-    with open(f"data/companies_{industry_group}_{revenue}.csv", "w") as file:
+    with open(filename, "w") as file:
         writer = DictWriter(file, fieldnames=enriched_companies[0].model_dump().keys())
 
         # Write the header with the fieldnames
@@ -184,7 +189,7 @@ def write_enriched_companies_to_file(enriched_companies: list[CompanyWithJobCoun
         for company in enriched_companies:
             writer.writerow(company.model_dump())
 
-    print(f"List written to data/companies_{industry_group}_{revenue}.txt successfully")
+    print(f"List written to {filename} successfully")
 
 
 if __name__ == "__main__":
