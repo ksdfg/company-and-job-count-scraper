@@ -156,8 +156,13 @@ def fetch_enriched_companies_from_coresignal(companies: list[CompanyWithLinkedin
 
     enriched_companies = []
     for i, company in enumerate(companies):
-        enriched_companies.append(enrich_company_with_coresignal_job_counts(company))
+        result = enrich_company_with_coresignal_job_counts(company)
+        if result.ai_jobs == -1 or result.engineer_jobs == -1 or result.it_jobs == -1:
+            enriched_companies.append(result)
+            break
+        enriched_companies.append(result)
         print("Fetched job counts for", company.company_name, "(", i + 1, "/", len(companies), ")")
+        # break
 
     print("\nFound", len(enriched_companies), "enriched companies", end="\n\n")
 
@@ -198,6 +203,7 @@ if __name__ == "__main__":
     companies = fetch_companies_from_cience(industry_group, revenue, max_pages)
 
     enriched_companies = fetch_enriched_companies_from_coresignal(companies)
+    
 
     if len(enriched_companies) > 0:
         write_enriched_companies_to_file(enriched_companies)

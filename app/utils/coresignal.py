@@ -37,9 +37,18 @@ def search_jobs(
         }
     )
     response = requests.request("POST", url, headers=headers, data=payload)
+    
+    
+    if response.status_code == 402:
+        print("NOT ENOUGH CORESIGNAL CREDITS!")
+        return -1
 
     # Get the number of job postings from the response headers
     job_count = response.headers.get("x-total-results")
+    
+    print(response.headers)
+    print(f"Job count for {company_linkedin_slug} for {keyword_description}: {job_count}")
+    print(f"Job IDs->{response.json()}")
     # If the job count is not a number or is empty, return 0
     if not job_count or not job_count.isnumeric():
         return 0
@@ -61,24 +70,27 @@ def enrich_company_with_coresignal_job_counts(
     :param company: A CompanyWithLinkedinSlug object to enrich with job counts.
     :return: A CompanyWithJobCounts object with the job counts.
     """
+    ai_jobs=search_jobs(company.linkedin_slug, "AI")
+    engineer_jobs=search_jobs(company.linkedin_slug, "Engineer")
+    it_jobs=search_jobs(company.linkedin_slug, "IT")
+    
     return CompanyWithJobCounts(
         **company.model_dump(),
-        ai_jobs=search_jobs(company.linkedin_slug, "AI"),
-        engineer_jobs=search_jobs(company.linkedin_slug, "Engineer"),
-        it_jobs=search_jobs(company.linkedin_slug, "IT"),
+        ai_jobs=ai_jobs,
+        engineer_jobs=engineer_jobs,
+        it_jobs=it_jobs
     )
 
 
 if __name__ == "__main__":
     company = CompanyWithLinkedinSlug(
-        company_name="Opus",
-        industry="Internet",
-        location="United States, Illinois",
-        revenue="$1B and Over",
-        employees="11-50",
-        cience_details_page="https://www.cience.com/company/opus/1639153433099655092",
-        linkedin_slug="google",
+        company_name="Faraday Future",
+        industry="Automotive",
+        location="United States, California",
+        revenue="$1 Million to $5 Million",
+        employees="1001-5000",
+        cience_details_page="http://linkedin.com/company/faradayfuture",
+        linkedin_slug="faradayfuture",
     )
 
     enriched_company = enrich_company_with_coresignal_job_counts(company)
-    print(enriched_company)
